@@ -23,3 +23,4 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 use App\Http\Controllers\PasienController;
 Route::get('/pasien', [PasienController::class, 'index']);
 Route::get('/pasien/create', [PasienController::class, 'create']);
+Route::post('/pasien', [PasienController::class, 'store']);

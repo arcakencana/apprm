@@ -25,7 +25,16 @@ class PasienController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'no_nik'        => 'required',
+            'nama_anggota'  => 'required',
+            'nama_kk'       => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat'        => 'required',
+            'no_telp'     => 'required',
+            'no_bpjs'       => 'required',
+            'no_rm_lama'    => 'required'
+        ]);
     }
 
     public function show($id)
