@@ -17,7 +17,7 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -30,7 +30,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/dashboard') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-notes-medical"></i>
                 </div>
@@ -64,9 +64,6 @@
                     </div>
                 </div>
             </li>
-
-
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -140,7 +137,7 @@
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Username</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->name }}</span>
                 <img class="img-profile rounded-circle"
                 src="{{ asset('template/img/undraw_profile.svg') }}">
             </a>
@@ -160,7 +157,7 @@
                 Activity Log
             </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
+            <a class="dropdown-item" href="{{ route('logout') }}">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
             </a>
@@ -180,12 +177,19 @@
         <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-clipboard-list"></i> {{ $title }}</h1>
        {{--  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-        --}}        </div>
+            --}}        
+        </div>
 
-        @yield('content')
+        <div class="col-md-12">
+          @if(session()->has('message'))
+          <div class="alert alert-info alert-sm">{{ session()->get('message') }}</div>
+          @endif
+      </div>
 
-    </div>
-    <!-- /.container-fluid -->
+      @yield('content')
+
+  </div>
+  <!-- /.container-fluid -->
 
 </div>
 <!-- End of Main Content -->
@@ -210,26 +214,6 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-    </div>
-</div>
-</div>
 
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>

@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pasien;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 
 class PasienController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
         $data['title'] = "Pasien";
         $data['pasien'] = Pasien::get();
-
+        
         return view('pasien.index', $data);
     }
 
@@ -29,12 +36,25 @@ class PasienController extends Controller
             'no_nik'        => 'required',
             'nama_anggota'  => 'required',
             'nama_kk'       => 'required',
-            'tanggal_lahir' => 'required',
+            'tgl_lahir'     => 'required',
             'alamat'        => 'required',
-            'no_telp'     => 'required',
-            'no_bpjs'       => 'required',
-            'no_rm_lama'    => 'required'
+            'no_telp'       => 'required',
+            'no_bpjs'       => 'required'
         ]);
+
+        $pasien = new Pasien;
+        $pasien->no_rm_lama     = $request->no_rm_lama;
+        $pasien->nama_kk        = $request->nama_kk;
+        $pasien->nama_anggota   = $request->nama_anggota;
+        $pasien->tgl_lahir      = $request->tgl_lahir;
+        $pasien->alamat         = $request->alamat;
+        $pasien->no_bpjs        = $request->no_bpjs;
+        $pasien->no_telp        = $request->no_telp;
+        $pasien->no_nik         = $request->no_nik;
+        $pasien->save();
+
+        return redirect('/pasien')->with('message', 'Success Add...');
+
     }
 
     public function show($id)
@@ -44,16 +64,68 @@ class PasienController extends Controller
 
     public function edit($id)
     {
-        //
+
+        try {
+            $no_rm = Crypt::decryptString($id);
+        } catch (DecryptException $e) {
+            return redirect(404);
+        }
+
+        $data['title'] = "Pasien";
+        $data['pasien'] = Pasien::where('no_rm', $no_rm)->first();
+
+        return view('pasien.edit', $data);
+
     }
 
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            $no_rm = Crypt::decryptString($id);
+        } catch (DecryptException $e) {
+            return redirect(404);
+        }
+
+        $request->validate([
+            'no_nik'        => 'required',
+            'nama_anggota'  => 'required',
+            'nama_kk'       => 'required',
+            'tgl_lahir'     => 'required',
+            'alamat'        => 'required',
+            'no_telp'       => 'required',
+            'no_bpjs'       => 'required',
+            'no_rm_lama'    => 'required'
+        ]);
+
+        $pasien = Pasien::find($no_rm);
+        $pasien->no_rm_lama     = $request->no_rm_lama;
+        $pasien->nama_kk        = $request->nama_kk;
+        $pasien->nama_anggota   = $request->nama_anggota;
+        $pasien->tgl_lahir      = $request->tgl_lahir;
+        $pasien->alamat         = $request->alamat;
+        $pasien->no_bpjs        = $request->no_bpjs;
+        $pasien->no_telp        = $request->no_telp;
+        $pasien->no_nik         = $request->no_nik;
+        $pasien->save();
+
+        return redirect('/pasien')->with('message', 'Success Update...');
+
     }
 
     public function destroy($id)
     {
-        //
+
+        try {
+            $no_rm = Crypt::decryptString($id);
+        } catch (DecryptException $e) {
+            return redirect(404);
+        }
+
+        $pasien = Pasien::find($no_rm);
+        $pasien->delete();
+
+        return redirect('/pasien')->with('message', 'Success Delete...');
+
     }
 }

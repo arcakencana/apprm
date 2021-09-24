@@ -15,7 +15,7 @@
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="table table-bordered" id="table" width="100%" cellspacing="0">
+					<table class="table table-bordered" id="table" width="100%" cellspacing="0" style="font-size: 13px;">
 						<thead>
 							<tr>
 								<th>No RM</th>
@@ -51,20 +51,31 @@
 								<td>{{ $data->no_rm_lama }}</td>
 								<td>{{ $data->nama_kk }}</td>
 								<td>{{ $data->nama_anggota }}</td>
-								<td>{{ $data->tgl_lahir }}</td>
+								<td>{{ date('d-m-Y', strtotime($data->tgl_lahir)) }}</td>
 								<td>{{ $data->alamat }}</td>
 								<td>{{ $data->no_bpjs }}</td>
 								<td>{{ $data->no_telp }}</td>
 								<td>{{ $data->no_nik }}</td>
-								<td></td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
+								<td>
+									<div class="d-inline-flex">
+										<a href="{{ url('/pasien', ['id' => Crypt::encryptString($data->no_rm)]).'/edit' }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>&nbsp;
+										<form action="{{ url('/pasien', ['id' => Crypt::encryptString($data->no_rm)]) }}" method="post">
+											@csrf
+											@method('delete')
+
+											<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Confirm Delete...')"><i class="fas fa-trash"></i> Delete</button>
+										</form>
+									</div>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 
 @endsection
@@ -81,4 +92,10 @@
 		} );
 	} );
 </script>
-@endpush
+<script>
+      //alert
+      $(".alert").delay(3000).slideUp(400, function() {
+      	$(this).alert('close');
+      });
+  </script>
+  @endpush
