@@ -15,10 +15,21 @@ class PasienController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $data['title'] = "Pasien";
-        $data['pasien'] = Pasien::get();
+
+        $search = $request->search;
+        $select = $request->select;
+
+        $data['pasien'] = Pasien::when($search, function ($query) use ($search) {
+            return $query->where('no_rm', $search)->orWhere('no_nik', $search)->orWhere('nama_anggota', $search);
+        })
+        ->latest('no_rm')
+        ->paginate(10);;
+
+        $data['search'] = $search;
+        $data['select'] = $select;
         
         return view('pasien.index', $data);
     }
@@ -33,13 +44,13 @@ class PasienController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no_nik'        => 'required',
+            'no_nik'        => 'required|numeric',
             'nama_anggota'  => 'required',
             'nama_kk'       => 'required',
             'tgl_lahir'     => 'required',
             'alamat'        => 'required',
-            'no_telp'       => 'required',
-            'no_bpjs'       => 'required'
+            'no_telp'       => 'required|numeric',
+            'no_bpjs'       => 'required|numeric'
         ]);
 
         $pasien = new Pasien;
@@ -88,14 +99,13 @@ class PasienController extends Controller
         }
 
         $request->validate([
-            'no_nik'        => 'required',
+            'no_nik'        => 'required|numeric',
             'nama_anggota'  => 'required',
             'nama_kk'       => 'required',
             'tgl_lahir'     => 'required',
             'alamat'        => 'required',
-            'no_telp'       => 'required',
-            'no_bpjs'       => 'required',
-            'no_rm_lama'    => 'required'
+            'no_telp'       => 'required|numeric',
+            'no_bpjs'       => 'required|numeric'
         ]);
 
         $pasien = Pasien::find($no_rm);

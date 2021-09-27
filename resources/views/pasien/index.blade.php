@@ -14,8 +14,20 @@
 				</h6>
 			</div>
 			<div class="card-body">
+				<form action="" method="get">
+					<div class="form-group row">	
+						<div class="col-sm-5">
+							<input type="text" name="search" class="form-control" placeholder="Search..." autocomplete="off">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-primary btn-sm">
+								<i class="fa fa-search"></i> Cari
+							</button>
+						</div>
+					</div>
+				</form> 
 				<div class="table-responsive">
-					<table class="table table-bordered" id="table" width="100%" cellspacing="0" style="font-size: 13px;">
+					<table class="table table-bordered" style="font-size: 12px;">
 						<thead>
 							<tr>
 								<th>No RM</th>
@@ -30,20 +42,7 @@
 								<th>#</th>
 							</tr>
 						</thead>
-						{{-- <tfoot>
-							<tr>
-								<th>No RM</th>
-								<th>RM Lama</th>
-								<th>Nama KK</th>
-								<th>Nama Anggota</th>
-								<th>Tanggal Lahir</th>
-								<th>Alamat</th>
-								<th>No BPJS</th>
-								<th>No Telpon</th>
-								<th>NIK</th>
-								<th>#</th>
-							</tr>
-						</tfoot> --}}
+
 						<tbody>
 							@foreach($pasien as $data)
 							<tr>
@@ -72,7 +71,9 @@
 						@endforeach
 					</tbody>
 				</table>
+
 			</div>
+			{{ $pasien->appends(['select' => $select])->links() }}
 		</div>
 	</div>
 </div>
@@ -81,21 +82,10 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-<script>
-	$(document).ready(function() {
-		$('#table').DataTable( {
-			"paging":   true,
-			"ordering": true,
-			"info":     true
-		} );
-	} );
-</script>
 <script>
       //alert
       $(".alert").delay(3000).slideUp(400, function() {
       	$(this).alert('close');
       });
-  </script>
-  @endpush
+</script>
+@endpush
