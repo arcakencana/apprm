@@ -26,7 +26,7 @@ class PasienController extends Controller
             return $query->where('no_rm', $search)->orWhere('no_nik', $search)->orWhere('nama_anggota', $search);
         })
         ->latest('no_rm')
-        ->paginate(10);;
+        ->paginate(10);
 
         $data['search'] = $search;
         $data['select'] = $select;
